@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getPaginatePosts, getMe } from '../WebAPI';
-import { createPaginateArr } from '../utils';
+import { getPaginatePosts, getMe, login as loginAPI } from '../WebAPI';
+import { createPaginateArr, setAuthToken } from '../utils';
 
 export const blogSlice = createSlice({
   name: 'blog',
@@ -52,6 +52,18 @@ export const getUser = () => (dispatch) => {
   getMe().then((res) => {
     if (res.ok) dispatch(setUser(res.data));
     dispatch(setIsLodingUser(false));
+  });
+};
+
+export const login = (username, password) => (dispatch) => {
+  loginAPI(username, password).then((data) => {
+    // 錯誤處理
+    setAuthToken(data.token);
+    getMe().then((res) => {
+      // handleError
+      dispatch(setUser(res.data));
+      dispatch(setIsSubmit(false));
+    });
   });
 };
 
