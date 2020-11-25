@@ -2,7 +2,11 @@ import styled from 'styled-components';
 import { Link, useLocation, useHistory } from 'react-router-dom';
 import { setAuthToken } from '../../utils';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectUser, setUser, selectIsLodingUser } from '../../redux/blogSlice';
+import {
+  selectUser,
+  setUser,
+  selectIsLodingUser,
+} from '../../redux/blogSlice';
 
 const HeaderContainer = styled.div`
   height: 64px;
@@ -68,6 +72,7 @@ export default function Header() {
     dispatch(setUser(null));
     if (pathname !== '/') history.push('/');
   };
+
 
   return (
     <HeaderContainer>

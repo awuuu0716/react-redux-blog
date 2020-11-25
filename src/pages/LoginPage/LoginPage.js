@@ -1,8 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { setIsSubmit, login } from '../../redux/blogSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  selectErrorMessage,
+  login,
+  setErrorMessage,
+  selectIsLogin,
+} from '../../redux/blogSlice';
 
 const ErrorMessage = styled.div`
   color: red;
@@ -22,19 +27,22 @@ const Form = styled.form`
 `;
 
 export default function LoginPage() {
+  const errorMessage = useSelector(selectErrorMessage);
+  const isLogin = useSelector(selectIsLogin);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
   const history = useHistory();
   const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setErrorMessage('');
+    dispatch(setErrorMessage(''));
     dispatch(login(username, password));
-    history.push('/');
   };
 
+  useEffect(()=>{
+    console.log(isLogin);
+  })
   return (
     <Form onSubmit={handleSubmit}>
       <div>

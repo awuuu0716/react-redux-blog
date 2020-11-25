@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { getPaginatePosts, getMe, login as loginAPI } from '../WebAPI';
 import { createPaginateArr, setAuthToken } from '../utils';
 
+
 export const blogSlice = createSlice({
   name: 'blog',
   initialState: {
@@ -9,6 +10,7 @@ export const blogSlice = createSlice({
     paginate: [],
     userData: null,
     isLodingUser: false,
+    isLogin: false,
     errorMessage: '',
   },
   reducers: {
@@ -27,6 +29,9 @@ export const blogSlice = createSlice({
     setErrorMessage: (state, action) => {
       state.errorMessage = action.payload;
     },
+    setIsLogin: (state, action) => {
+      state.errorMessage = action.payload;
+    },
   },
 });
 
@@ -36,6 +41,7 @@ export const {
   setUser,
   setIsLodingUser,
   setErrorMessage,
+  setIsLogin,
 } = blogSlice.actions;
 
 export const getPosts = (page) => (dispatch) => {
@@ -62,20 +68,18 @@ export const getUser = () => (dispatch) => {
 
 export const login = (username, password) => (dispatch) => {
   loginAPI(username, password).then((data) => {
-    // 錯誤處理
     if (data.ok === 0) {
-      setErrorMessage(data.message);
+      dispatch(setErrorMessage(data.message));
       return;
     }
     setAuthToken(data.token);
     getMe().then((res) => {
-      // handleError
-      if (response.ok !== 1) {
-        setErrorMessage(res.toString());
+      if (res.ok !== 1) {
+        dispatch(setErrorMessage(res.toString()));
         return;
       }
       dispatch(setUser(res.data));
-      dispatch(setIsSubmit(false));
+      dispatch(setIsLogin(true));
     });
   });
 };
@@ -84,5 +88,7 @@ export const selectPosts = (state) => state.blog.posts;
 export const selectPaginate = (state) => state.blog.paginate;
 export const selectUser = (state) => state.blog.userData;
 export const selectIsLodingUser = (state) => state.blog.isLodingUser;
+export const selectIsLogin = (state) => state.blog.isLogin;
+export const selectErrorMessage = (state) => state.blog.errorMessage;
 
 export default blogSlice.reducer;
