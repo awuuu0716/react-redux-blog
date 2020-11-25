@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import styled from 'styled-components';
-import { getPost } from '../../WebAPI';
 import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectPost, getPost, setPost } from '../../redux/blogSlice';
 
 const Root = styled.div`
   width: 40%;
@@ -27,21 +28,21 @@ const PostBody = styled.div`
 `;
 
 export default function PostPage() {
-  const [postData, setPostData] = useState('');
+  const post = useSelector(selectPost);
+  const dispatch = useDispatch();
   const { id } = useParams();
 
   useEffect(() => {
-    getPost(id).then((post) => setPostData(post[0]));
+    dispatch(getPost(id));
+    return () => dispatch(setPost(null));
   }, []);
 
   return (
     <Root>
       <div>
-        <PostTitle>{postData && postData.title}</PostTitle>
-        <PostDate>
-          {postData && new Date(postData.createdAt).toLocaleString()}
-        </PostDate>
-        <PostBody>{postData.body || ''}</PostBody>
+        <PostTitle>{post && post.title}</PostTitle>
+        <PostDate>{post && new Date(post.createdAt).toLocaleString()}</PostDate>
+        <PostBody>{post && post.body}</PostBody>
       </div>
     </Root>
   );

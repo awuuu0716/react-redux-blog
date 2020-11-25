@@ -1,7 +1,8 @@
 import { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import { newPost } from '../../WebAPI';
+import { useDispatch,useSelector } from 'react-redux';
+import { newPost, selectErrorMessage } from '../../redux/blogSlice';
 
 const ErrorMessage = styled.div`
   color: red;
@@ -64,18 +65,18 @@ const SubmitButton = styled.button`
 export default function NewPostPage() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const errorMessage = useSelector(selectErrorMessage);
   const history = useHistory();
   const isSubmit = useRef(false);
+  const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (isSubmit.current) return;
     isSubmit.current = true;
-    newPost(title, content).then((response) => {
-      if (response.ok === 0) return setErrorMessage(response.message);
-      history.push('/');
+    dispatch(newPost(title, content)).then((res) => {
       isSubmit.current = false;
+      if (res) history.push('/');
     });
   };
 

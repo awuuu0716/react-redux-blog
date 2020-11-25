@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -31,11 +31,15 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const history = useHistory();
   const dispatch = useDispatch();
+  const isSubmit = useRef(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (isSubmit.current) return;
+    isSubmit.current = true;
     dispatch(setErrorMessage(''));
     dispatch(login(username, password)).then((res) => {
+      isSubmit.current = false;
       if (res) history.push('/');
     });
   };

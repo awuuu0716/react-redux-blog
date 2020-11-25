@@ -1,5 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getPaginatePosts, getMe, login as loginAPI } from '../WebAPI';
+import {
+  getPaginatePosts,
+  getMe,
+  login as loginAPI,
+  newPost as newPostAPI,
+  getPost as getPostAPI,
+} from '../WebAPI';
 import { createPaginateArr, setAuthToken } from '../utils';
 
 export const blogSlice = createSlice({
@@ -11,10 +17,14 @@ export const blogSlice = createSlice({
     isLodingUser: false,
     loginResponse: null,
     errorMessage: '',
+    post: null,
   },
   reducers: {
     setPosts: (state, action) => {
       state.posts = action.payload;
+    },
+    setPost: (state, action) => {
+      state.post = action.payload;
     },
     setPaginate: (state, action) => {
       state.paginate = action.payload;
@@ -41,6 +51,7 @@ export const {
   setIsLodingUser,
   setErrorMessage,
   setLoginResponse,
+  setPost,
 } = blogSlice.actions;
 
 export const getPosts = (page) => (dispatch) => {
@@ -56,6 +67,12 @@ export const getPosts = (page) => (dispatch) => {
     .then((posts) => {
       dispatch(setPosts(posts));
     });
+};
+
+export const getPost = (id) => (dispatch) => {
+  getPostAPI(id).then((post) => {
+    dispatch(setPost(post[0]));
+  });
 };
 
 export const getUser = () => (dispatch) => {
@@ -83,7 +100,18 @@ export const login = (username, password) => (dispatch) => {
   });
 };
 
+export const newPost = (title, content) => (dispatch) => {
+  return newPostAPI(title, content).then((res) => {
+    if (res.ok === 0) {
+      dispatch(setErrorMessage(res.message));
+      return;
+    }
+    return res;
+  });
+};
+
 export const selectPosts = (state) => state.blog.posts;
+export const selectPost = (state) => state.blog.post;
 export const selectPaginate = (state) => state.blog.paginate;
 export const selectUser = (state) => state.blog.userData;
 export const selectIsLodingUser = (state) => state.blog.isLodingUser;
