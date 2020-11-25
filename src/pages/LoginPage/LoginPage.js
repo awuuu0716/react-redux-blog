@@ -6,7 +6,6 @@ import {
   selectErrorMessage,
   login,
   setErrorMessage,
-  selectIsLogin,
 } from '../../redux/blogSlice';
 
 const ErrorMessage = styled.div`
@@ -28,7 +27,6 @@ const Form = styled.form`
 
 export default function LoginPage() {
   const errorMessage = useSelector(selectErrorMessage);
-  const isLogin = useSelector(selectIsLogin);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const history = useHistory();
@@ -37,12 +35,11 @@ export default function LoginPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(setErrorMessage(''));
-    dispatch(login(username, password));
+    dispatch(login(username, password)).then((res) => {
+      if (res) history.push('/');
+    });
   };
 
-  useEffect(()=>{
-    console.log(isLogin);
-  })
   return (
     <Form onSubmit={handleSubmit}>
       <div>

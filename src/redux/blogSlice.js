@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 import { getPaginatePosts, getMe, login as loginAPI } from '../WebAPI';
 import { createPaginateArr, setAuthToken } from '../utils';
 
-
 export const blogSlice = createSlice({
   name: 'blog',
   initialState: {
@@ -10,7 +9,7 @@ export const blogSlice = createSlice({
     paginate: [],
     userData: null,
     isLodingUser: false,
-    isLogin: false,
+    loginResponse: null,
     errorMessage: '',
   },
   reducers: {
@@ -29,7 +28,7 @@ export const blogSlice = createSlice({
     setErrorMessage: (state, action) => {
       state.errorMessage = action.payload;
     },
-    setIsLogin: (state, action) => {
+    setLoginResponse: (state, action) => {
       state.errorMessage = action.payload;
     },
   },
@@ -41,7 +40,7 @@ export const {
   setUser,
   setIsLodingUser,
   setErrorMessage,
-  setIsLogin,
+  setLoginResponse,
 } = blogSlice.actions;
 
 export const getPosts = (page) => (dispatch) => {
@@ -67,19 +66,19 @@ export const getUser = () => (dispatch) => {
 };
 
 export const login = (username, password) => (dispatch) => {
-  loginAPI(username, password).then((data) => {
+  return loginAPI(username, password).then((data) => {
     if (data.ok === 0) {
       dispatch(setErrorMessage(data.message));
       return;
     }
     setAuthToken(data.token);
-    getMe().then((res) => {
+    return getMe().then((res) => {
       if (res.ok !== 1) {
         dispatch(setErrorMessage(res.toString()));
         return;
       }
       dispatch(setUser(res.data));
-      dispatch(setIsLogin(true));
+      return res;
     });
   });
 };
@@ -88,7 +87,6 @@ export const selectPosts = (state) => state.blog.posts;
 export const selectPaginate = (state) => state.blog.paginate;
 export const selectUser = (state) => state.blog.userData;
 export const selectIsLodingUser = (state) => state.blog.isLodingUser;
-export const selectIsLogin = (state) => state.blog.isLogin;
 export const selectErrorMessage = (state) => state.blog.errorMessage;
 
 export default blogSlice.reducer;

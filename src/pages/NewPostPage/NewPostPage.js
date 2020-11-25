@@ -20,7 +20,7 @@ const Form = styled.form`
 `;
 
 const InputContainer = styled.div`
-  width:100%;
+  width: 100%;
 `;
 
 const InputTitle = styled.input`
@@ -61,8 +61,6 @@ const SubmitButton = styled.button`
   }
 `;
 
-
-
 export default function NewPostPage() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -72,13 +70,13 @@ export default function NewPostPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (isSubmit.current) return
+    if (isSubmit.current) return;
     isSubmit.current = true;
-      newPost(title, content).then((response) => {
-        if (response.ok === 0) return setErrorMessage(response.message);
-        history.push('/');
-        isSubmit.current = false;
-      });
+    newPost(title, content).then((response) => {
+      if (response.ok === 0) return setErrorMessage(response.message);
+      history.push('/');
+      isSubmit.current = false;
+    });
   };
 
   return (
