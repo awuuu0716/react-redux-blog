@@ -9,6 +9,7 @@ export const blogSlice = createSlice({
     paginate: [],
     userData: null,
     isLodingUser: false,
+    errorMessage: '',
   },
   reducers: {
     setPosts: (state, action) => {
@@ -23,6 +24,9 @@ export const blogSlice = createSlice({
     setIsLodingUser: (state, action) => {
       state.isLodingUser = action.payload;
     },
+    setErrorMessage: (state, action) => {
+      state.errorMessage = action.payload;
+    },
   },
 });
 
@@ -31,6 +35,7 @@ export const {
   setPaginate,
   setUser,
   setIsLodingUser,
+  setErrorMessage,
 } = blogSlice.actions;
 
 export const getPosts = (page) => (dispatch) => {
@@ -58,9 +63,17 @@ export const getUser = () => (dispatch) => {
 export const login = (username, password) => (dispatch) => {
   loginAPI(username, password).then((data) => {
     // 錯誤處理
+    if (data.ok === 0) {
+      setErrorMessage(data.message);
+      return;
+    }
     setAuthToken(data.token);
     getMe().then((res) => {
       // handleError
+      if (response.ok !== 1) {
+        setErrorMessage(res.toString());
+        return;
+      }
       dispatch(setUser(res.data));
       dispatch(setIsSubmit(false));
     });
