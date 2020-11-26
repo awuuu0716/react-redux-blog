@@ -5,6 +5,8 @@ import {
   login as loginAPI,
   newPost as newPostAPI,
   getPost as getPostAPI,
+  deletePost as deletePostAPI,
+  editPost as editPostAPI,
 } from '../WebAPI';
 import { createPaginateArr, setAuthToken } from '../utils';
 
@@ -70,9 +72,14 @@ export const getPosts = (page) => (dispatch) => {
 };
 
 export const getPost = (id) => (dispatch) => {
-  getPostAPI(id).then((post) => {
+  return getPostAPI(id).then((post) => {
     dispatch(setPost(post[0]));
+    return post
   });
+};
+
+export const deletePost = (id) => (dispatch) => {
+  return deletePostAPI(id).then((res) => res);
 };
 
 export const getUser = () => (dispatch) => {
@@ -102,6 +109,16 @@ export const login = (username, password) => (dispatch) => {
 
 export const newPost = (title, content) => (dispatch) => {
   return newPostAPI(title, content).then((res) => {
+    if (res.ok === 0) {
+      dispatch(setErrorMessage(res.message));
+      return;
+    }
+    return res;
+  });
+};
+
+export const editPost = (title, content, id) => (dispatch) => {
+  return editPostAPI(title, content, id).then((res) => {
     if (res.ok === 0) {
       dispatch(setErrorMessage(res.message));
       return;

@@ -10,6 +10,7 @@ import HomePage from '../../pages/HomePage';
 import PostPage from '../../pages/PostPage';
 import NewPostPage from '../../pages/NewPostPage';
 import AboutPage from '../../pages/AboutPage';
+import EditPostPage from '../../pages/EditPostPage';
 import Header from '../Header';
 
 const Root = styled.div`
@@ -42,6 +43,9 @@ function App() {
           </Route>
           <Route path="/new-post">
             <NewPostPage />
+          </Route>
+          <Route path="/edit/:id">
+            <EditPostPage />
           </Route>
           <Route path="/about">
             <AboutPage />

@@ -1,8 +1,14 @@
 import { useEffect } from 'react';
 import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectPost, getPost, setPost } from '../../redux/blogSlice';
+import {
+  selectPost,
+  getPost,
+  setPost,
+  deletePost,
+  selectUser,
+} from '../../redux/blogSlice';
 
 const Root = styled.div`
   width: 40%;
@@ -10,7 +16,9 @@ const Root = styled.div`
   padding-top: 50px;
 `;
 
-const PostTitle = styled.div`
+const TitleContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
   font-size: 48px;
   font-weight: bold;
   color: #333;
@@ -25,11 +33,46 @@ const PostDate = styled.div`
 const PostBody = styled.div`
   font-size: 24px;
   color: #333;
+  max-width: 600px;
+  word-wrap: break-word;
+`;
+
+const Button = styled.button`
+  font-size: 20px;
+  border: 1px solid #333;
+  border-radius: 3px;
+  background: white;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+
+  &:hover {
+    background: red;
+    color: white;
+  }
+
+  & + & {
+    margin-left: 10px;
+
+    &:hover {
+      background: green;
+      color: white;
+    }
+  }
+`;
+
+const Title = styled.h1`
+  font-size: 32px;
+  max-width: 600px;
+  color: #333;
+  word-wrap: break-word;
 `;
 
 export default function PostPage() {
+  const user = useSelector(selectUser);
   const post = useSelector(selectPost);
   const dispatch = useDispatch();
+  const history = useHistory();
   const { id } = useParams();
 
   useEffect(() => {
@@ -37,10 +80,26 @@ export default function PostPage() {
     return () => dispatch(setPost(null));
   }, []);
 
+  const handleDelete = (id) => {
+    dispatch(deletePost(id)).then(() => history.push('/'));
+  };
+
+  const handleEdit = (id) => {
+    history.push(`/edit/${id}`);
+  };
+
   return (
     <Root>
       <div>
-        <PostTitle>{post && post.title}</PostTitle>
+        <TitleContainer>
+          <Title>{post && post.title}</Title>
+          {user && (
+            <div>
+              <Button onClick={() => handleDelete(id)}>Delete</Button>
+              <Button onClick={() => handleEdit(id)}>Edit</Button>
+            </div>
+          )}
+        </TitleContainer>
         <PostDate>{post && new Date(post.createdAt).toLocaleString()}</PostDate>
         <PostBody>{post && post.body}</PostBody>
       </div>

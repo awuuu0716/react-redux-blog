@@ -20,9 +20,13 @@ const PostContainer = styled.div`
   }
 `;
 const PostTitle = styled(Link)`
+  max-width: 500px;
   font-size: 24px;
   color: #333;
   text-decoration: none;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 
 const PostDate = styled.div`

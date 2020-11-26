@@ -24,6 +24,14 @@ export const login = (username, password) =>
     }),
   }).then((res) => res.json());
 
+export const deletePost = (id) =>
+  fetch(`${BASE_URL}/posts/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'content-type': 'application/json',
+    },
+  }).then((res) => res.json());
+
 export const signUp = (nickname, username, password) =>
   fetch(`${BASE_URL}/register`, {
     method: 'POST',
@@ -53,6 +61,19 @@ export const newPost = (title, body) => {
     headers: {
       'content-type': 'application/json',
       authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      title,
+      body,
+    }),
+  }).then((res) => res.json());
+};
+
+export const editPost = (title, body, id) => {
+  return fetch(`${BASE_URL}/posts/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'content-type': 'application/json',
     },
     body: JSON.stringify({
       title,
