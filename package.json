@@ -15,7 +15,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
     "styled-components": "^5.2.1",
-    "homepage": "https://myusername.github.io/react-redux-blog"
+    "homepage": "https://awuuu0716.github.io/react-redux-blog"
   },
   "scripts": {
     "predeploy": "npm run build",
