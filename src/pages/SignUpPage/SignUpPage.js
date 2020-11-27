@@ -1,6 +1,6 @@
-import { useState, useContext, useRef } from 'react';
-import styled from 'styled-components';
+import { useState, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
+import styled from 'styled-components';
 import { signUp, getMe } from '../../WebAPI';
 import { setAuthToken } from '../../utils';
 import { useDispatch } from 'react-redux';

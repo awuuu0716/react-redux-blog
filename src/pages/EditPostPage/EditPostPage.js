@@ -1,11 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
-import styled from 'styled-components';
 import { useHistory, useParams } from 'react-router-dom';
+import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   editPost,
   selectErrorMessage,
-  selectPost,
   getPost,
   setPost,
 } from '../../redux/blogSlice';
@@ -69,7 +68,6 @@ const SubmitButton = styled.button`
 `;
 
 export default function NewPostPage() {
-  const post = useSelector(selectPost);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const errorMessage = useSelector(selectErrorMessage);
@@ -89,12 +87,12 @@ export default function NewPostPage() {
   };
 
   useEffect(() => {
-    dispatch(getPost(id)).then(() => {
-      setTitle(post.title);
-      setContent(post.body);
+    dispatch(getPost(id)).then((post) => {
+      setTitle(post[0].title);
+      setContent(post[0].body);
     });
     return () => dispatch(setPost(null));
-  }, []);
+  }, [dispatch, id]);
 
   return (
     <Form onSubmit={handleSubmit}>

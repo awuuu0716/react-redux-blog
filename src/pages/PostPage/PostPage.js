@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import styled from 'styled-components';
 import { useParams, useHistory } from 'react-router-dom';
+import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   selectPost,

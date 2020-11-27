@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectPosts, selectPaginate, getPosts } from '../../redux/blogSlice';
 

@@ -24,7 +24,9 @@ export default function AboutPage() {
     <Root>
       <div>
         <AboutTitle>About This Blog</AboutTitle>
-        <AboutBody>A blog that made up with React, still practing T_T.</AboutBody>
+        <AboutBody>
+          A blog that made up with React, still practing T_T.
+        </AboutBody>
       </div>
     </Root>
   );

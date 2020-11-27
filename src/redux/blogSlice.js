@@ -74,7 +74,7 @@ export const getPosts = (page) => (dispatch) => {
 export const getPost = (id) => (dispatch) => {
   return getPostAPI(id).then((post) => {
     dispatch(setPost(post[0]));
-    return post
+    return post;
   });
 };
 

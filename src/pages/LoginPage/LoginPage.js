@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
-import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
+import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   selectErrorMessage,

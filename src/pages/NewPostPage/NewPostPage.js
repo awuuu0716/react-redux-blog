@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
-import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import { useDispatch,useSelector } from 'react-redux';
+import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
 import { newPost, selectErrorMessage } from '../../redux/blogSlice';
 
 const ErrorMessage = styled.div`
