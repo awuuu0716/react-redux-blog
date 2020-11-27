@@ -32,7 +32,7 @@ export const deletePost = (id) =>
     },
   }).then((res) => res.json());
 
-export const signUp = (nickname, username, password) =>
+export const signUp = ({ username, password, nickname }) =>
   fetch(`${BASE_URL}/register`, {
     method: 'POST',
     headers: {

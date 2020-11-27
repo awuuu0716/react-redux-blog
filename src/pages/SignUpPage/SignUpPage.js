@@ -1,10 +1,12 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import { signUp, getMe } from '../../WebAPI';
-import { setAuthToken } from '../../utils';
-import { useDispatch } from 'react-redux';
-import { setUser } from '../../redux/blogSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  signUp,
+  selectErrorMessage,
+  setErrorMessage,
+} from '../../redux/blogSlice';
 
 const ErrorMessage = styled.div`
   color: red;
@@ -24,33 +26,25 @@ const Form = styled.form`
 `;
 
 export default function SignUpPage() {
-  const dispatch = useDispatch();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [nickname, setNickname] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const errorMessage = useSelector(selectErrorMessage);
   const isSubmit = useRef(false);
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
-    setErrorMessage('');
     e.preventDefault();
     if (isSubmit.current) return;
     isSubmit.current = true;
-    signUp(nickname, username, password).then((data) => {
-      if (data.ok === 0) return setErrorMessage(data.message);
-      setAuthToken(data.token);
-      getMe().then((response) => {
-        if (response.ok !== 1) {
-          setAuthToken('');
-          return setErrorMessage(response.toString());
-        }
-        dispatch(setUser(response.data));
-        history.push('/');
-        isSubmit.current = false;
-      });
+    dispatch(signUp({username, password, nickname})).then((res) => {
+      isSubmit.current = false;
+      if (res) history.push('/');
     });
   };
+
+  useEffect(() => () => dispatch(setErrorMessage('')), [dispatch]);
 
   return (
     <Form onSubmit={handleSubmit}>
