@@ -74,7 +74,7 @@ export default function HomePage() {
   const paginate = useSelector(selectPaginate);
   const dispatch = useDispatch();
 
-  useEffect(() => dispatch(getPosts(1)), []);
+  useEffect(() => dispatch(getPosts(1)), [dispatch]);
 
   const handlePaginate = (page) => dispatch(getPosts(page));
 

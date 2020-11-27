@@ -78,7 +78,7 @@ export default function PostPage() {
   useEffect(() => {
     dispatch(getPost(id));
     return () => dispatch(setPost(null));
-  }, []);
+  }, [dispatch, id]);
 
   const handleDelete = (id) => {
     dispatch(deletePost(id)).then(() => history.push('/'));
